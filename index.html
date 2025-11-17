@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS 1130 - Programming Assignments</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        nav {
+            background: #2a5298;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+
+        nav button:hover {
+            background: #1e3c72;
+        }
+
+        nav button.active {
+            background: #1e3c72;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .calculator {
+            display: none;
+        }
+
+        .calculator.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #1e3c72;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: border 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button.btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+
+        button.btn:hover {
+            background: #5568d3;
+        }
+
+        button.btn-clear {
+            background: #6c757d;
+        }
+
+        button.btn-clear:hover {
+            background: #5a6268;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+            animation: slideIn 0.5s;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .result h3 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+        }
+
+        .result-item {
+            padding: 10px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .conversion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .conversion-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+        }
+
+        footer {
+            background: #1e3c72;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CS 1130 - Programming Assignments</h1>
+            <p>HTML & JavaScript Calculator Collection</p>
+        </header>
+
+        <nav>
+            <button onclick="showCalculator('conversion')" class="active">Assignment #1: Conversion</button>
+            <button onclick="showCalculator('tax')">Assignment #2: Tax Calculator</button>
+            <button onclick="showCalculator('loops')">Assignment #3: Loops</button>
+            <button onclick="showCalculator('payroll')">Assignment #4: Payroll</button>
+        </nav>
+
+        <div class="content">
+            <!-- Assignment #1: Conversion Calculator -->
+            <div id="conversion" class="calculator active">
+                <h2>Assignment #1: Unit Conversion Calculator</h2>
+                
+                <div class="conversion-grid">
+                    <div class="conversion-box">
+                        <h3>Temperature Conversion</h3>
+                        <div class="form-group">
+                            <label>Celsius to Fahrenheit:</label>
+                            <input type="number" id="celsius" placeholder="Enter Celsius">
+                            <button class="btn" onclick="celsiusToFahrenheit()">Convert</button>
+                        </div>
+                        <div class="form-group">
+                            <label>Fahrenheit to Celsius:</label>
+                            <input type="number" id="fahrenheit" placeholder="Enter Fahrenheit">
+                            <button class="btn" onclick="fahrenheitToCelsius()">Convert</button>
+                        </div>
+                    </div>
+
+                    <div class="conversion-box">
+                        <h3>Length Conversion</h3>
+                        <div class="form-group">
+                            <label>Meters to Feet:</label>
+                            <input type="number" id="meters" placeholder="Enter Meters">
+                            <button class="btn" onclick="metersToFeet()">Convert</button>
+                        </div>
+                        <div class="form-group">
+                            <label>Feet to Meters:</label>
+                            <input type="number" id="feet" placeholder="Enter Feet">
+                            <button class="btn" onclick="feetToMeters()">Convert</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="conversionResult" class="result">
+                    <h3>Conversion Result:</h3>
+                    <div id="conversionOutput"></div>
+                </div>
+            </div>
+
+            <!-- Assignment #2: Income Tax Calculator -->
+            <div id="tax" class="calculator">
+                <h2>Assignment #2: Income Tax Calculator</h2>
+                <p style="margin-bottom: 20px; color: #666;">Calculate your income tax based on Philippine tax brackets (2023)</p>
+                
+                <div class="form-group">
+                    <label>Annual Income (₱):</label>
+                    <input type="number" id="income" placeholder="Enter annual income">
+                </div>
+
+                <button class="btn" onclick="calculateTax()">Calculate Tax</button>
+                <button class="btn btn-clear" onclick="clearTax()">Clear</button>
+
+                <div id="taxResult" class="result">
+                    <h3>Tax Calculation:</h3>
+                    <div id="taxOutput"></div>
+                </div>
+            </div>
+
+            <!-- Assignment #3: Loops (Factorial, Sum, Average) -->
+            <div id="loops" class="calculator">
+                <h2>Assignment #3: Loop Calculations</h2>
+                
+                <div class="form-group">
+                    <label>Enter a Number (N):</label>
+                    <input type="number" id="loopNumber" placeholder="Enter a positive integer" min="1">
+                </div>
+
+                <button class="btn" onclick="calculateFactorial()">Factorial (While Loop)</button>
+                <button class="btn" onclick="calculateSum()">Sum (Do-While Loop)</button>
+                <button class="btn" onclick="calculateAverage()">Average (For Loop)</button>
+                <button class="btn btn-clear" onclick="clearLoops()">Clear</button>
+
+                <div id="loopResult" class="result">
+                    <h3>Results:</h3>
+                    <div id="loopOutput"></div>
+                </div>
+            </div>
+
+            <!-- Assignment #4: Simple Payroll -->
+            <div id="payroll" class="calculator">
+                <h2>Assignment #4: Simple Payroll System</h2>
+                
+                <div class="form-group">
+                    <label>Employee Name:</label>
+                    <input type="text" id="empName" placeholder="Enter employee name">
+                </div>
+
+                <div class="form-group">
+                    <label>Days Worked:</label>
+                    <input type="number" id="daysWorked" placeholder="Enter number of days" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Daily Rate (₱):</label>
+                    <input type="number" id="dailyRate" placeholder="Enter daily rate" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Deduction Amount (₱):</label>
+                    <input type="number" id="deduction" placeholder="Enter deduction amount" min="0" value="0">
+                </div>
+
+                <button class="btn" onclick="calculatePayroll()">Calculate Payroll</button>
+                <button class="btn btn-clear" onclick="clearPayroll()">Clear</button>
+
+                <div id="payrollResult" class="result">
+                    <h3>Payroll Summary:</h3>
+                    <div id="payrollOutput"></div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 CS 1130 - Introduction to Computing</p>
+            <p>Ateneo de Davao University</p>
+        </footer>
+    </div>
+
+    <script>
+        // Navigation
+        function showCalculator(calcId) {
+            const calculators = document.querySelectorAll('.calculator');
+            const buttons = document.querySelectorAll('nav button');
+            
+            calculators.forEach(calc => calc.classList.remove('active'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(calcId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Assignment #1: Conversion Functions
+        function celsiusToFahrenheit() {
+            const celsius = parseFloat(document.getElementById('celsius').value);
+            if (isNaN(celsius)) {
+                alert('Please enter a valid number');
+                return;
+            }
+            const fahrenheit = (celsius * 9/5) + 32;
+            showConversionResult(`${celsius}°C = ${fahrenheit.toFixed(2)}°F`);
+        }
+
+        function fahrenheitToCelsius() {
+            const fahrenheit = parseFloat(document.getElementById('fahrenheit').value);
+            if (isNaN(fahrenheit)) {
+                alert('Please enter a valid number');
+                return;
+            }
+            const celsius = (fahrenheit - 32) * 5/9;
+            showConversionResult(`${fahrenheit}°F = ${celsius.toFixed(2)}°C`);
+        }
+
+        function metersToFeet() {
+            const meters = parseFloat(document.getElementById('meters').value);
+            if (isNaN(meters)) {
+                alert('Please enter a valid number');
+                return;
+            }
+            const feet = meters * 3.28084;
+            showConversionResult(`${meters} meters = ${feet.toFixed(2)} feet`);
+        }
+
+        function feetToMeters() {
+            const feet = parseFloat(document.getElementById('feet').value);
+            if (isNaN(feet)) {
+                alert('Please enter a valid number');
+                return;
+            }
+            const meters = feet / 3.28084;
+            showConversionResult(`${feet} feet = ${meters.toFixed(2)} meters`);
+        }
+
+        function showConversionResult(text) {
+            const resultDiv = document.getElementById('conversionResult');
+            const outputDiv = document.getElementById('conversionOutput');
+            outputDiv.innerHTML = `<div class="result-item">${text}</div>`;
+            resultDiv.classList.add('show');
+        }
+
+        // Assignment #2: Income Tax Calculator
+        function calculateTax() {
+            const income = parseFloat(document.getElementById('income').value);
+            
+            if (isNaN(income) || income < 0) {
+                alert('Please enter a valid income amount');
+                return;
+            }
+
+            let tax = 0;
+            let bracket = '';
+            let basicTax = 0;
+            let rate = 0;
+            let excessOver = 0;
+
+            if (income <= 250000) {
+                tax = 0;
+                bracket = '₱250,000 and below';
+                basicTax = 0;
+                rate = 0;
+            } else if (income <= 400000) {
+                basicTax = 0;
+                rate = 0.20;
+                excessOver = 250000;
+                tax = basicTax + (income - excessOver) * rate;
+                bracket = 'Over ₱250,000 but not over ₱400,000';
+            } else if (income <= 800000) {
+                basicTax = 30000;
+                rate = 0.25;
+                excessOver = 400000;
+                tax = basicTax + (income - excessOver) * rate;
+                bracket = 'Over ₱400,000 but not over ₱800,000';
+            } else if (income <= 2000000) {
+                basicTax = 130000;
+                rate = 0.30;
+                excessOver = 800000;
+                tax = basicTax + (income - excessOver) * rate;
+                bracket = 'Over ₱800,000 but not over ₱2,000,000';
+            } else if (income <= 8000000) {
+                basicTax = 490000;
+                rate = 0.32;
+                excessOver = 2000000;
+                tax = basicTax + (income - excessOver) * rate;
+                bracket = 'Over ₱2,000,000 but not over ₱8,000,000';
+            } else {
+                basicTax = 2410000;
+                rate = 0.35;
+                excessOver = 8000000;
+                tax = basicTax + (income - excessOver) * rate;
+                bracket = 'Over ₱8,000,000';
+            }
+
+            const netIncome = income - tax;
+            const excess = income > 250000 ? income - excessOver : 0;
+
+            let calculationDetails = '';
+            if (income > 250000) {
+                calculationDetails = `
+                    <div class="result-item">
+                        <strong>Calculation:</strong><br>
+                        Basic Tax: ₱${basicTax.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}<br>
+                        + ${(rate * 100)}% of excess over ₱${excessOver.toLocaleString()}<br>
+                        = ₱${basicTax.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})} + (₱${excess.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})} × ${rate})<br>
+                        = ₱${basicTax.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})} + ₱${(excess * rate).toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                    </div>
+                `;
+            }
+
+            const output = `
+                <div class="result-item"><strong>Net Taxable Income:</strong> ₱${income.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                <div class="result-item"><strong>Tax Bracket:</strong> ${bracket}</div>
+                ${calculationDetails}
+                <div class="result-item" style="background: #fff3cd; border-color: #ffc107;">
+                    <strong>Income Tax:</strong> ₱${tax.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                </div>
+                <div class="result-item" style="background: #d4edda; border-color: #c3e6cb;">
+                    <strong>Net Income After Tax:</strong> ₱${netIncome.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                </div>
+            `;
+
+            document.getElementById('taxOutput').innerHTML = output;
+            document.getElementById('taxResult').classList.add('show');
+        }
+
+        function clearTax() {
+            document.getElementById('income').value = '';
+            document.getElementById('taxResult').classList.remove('show');
+        }
+
+        // Assignment #3: Loop Calculations
+        function calculateFactorial() {
+            const n = parseInt(document.getElementById('loopNumber').value);
+            
+            if (isNaN(n) || n < 0) {
+                alert('Please enter a valid positive number');
+                return;
+            }
+
+            // While Loop for Factorial
+            let factorial = 1;
+            let i = 1;
+            while (i <= n) {
+                factorial *= i;
+                i++;
+            }
+
+            const output = `
+                <div class="result-item">
+                    <strong>Factorial of ${n} (While Loop):</strong><br>
+                    ${n}! = ${factorial.toLocaleString()}
+                </div>
+            `;
+
+            document.getElementById('loopOutput').innerHTML = output;
+            document.getElementById('loopResult').classList.add('show');
+        }
+
+        function calculateSum() {
+            const n = parseInt(document.getElementById('loopNumber').value);
+            
+            if (isNaN(n) || n < 0) {
+                alert('Please enter a valid positive number');
+                return;
+            }
+
+            // Do-While Loop for Sum
+            let sum = 0;
+            let i = 1;
+            do {
+                sum += i;
+                i++;
+            } while (i <= n);
+
+            const output = `
+                <div class="result-item">
+                    <strong>Sum of First ${n} Natural Numbers (Do-While Loop):</strong><br>
+                    Sum = ${sum.toLocaleString()}
+                </div>
+            `;
+
+            document.getElementById('loopOutput').innerHTML = output;
+            document.getElementById('loopResult').classList.add('show');
+        }
+
+        function calculateAverage() {
+            const n = parseInt(document.getElementById('loopNumber').value);
+            
+            if (isNaN(n) || n < 0) {
+                alert('Please enter a valid positive number');
+                return;
+            }
+
+            // For Loop for Average
+            let sum = 0;
+            for (let i = 1; i <= n; i++) {
+                sum += i;
+            }
+            const average = sum / n;
+
+            const output = `
+                <div class="result-item">
+                    <strong>Average of First ${n} Natural Numbers (For Loop):</strong><br>
+                    Sum = ${sum.toLocaleString()}<br>
+                    Average = ${average.toFixed(2)}
+                </div>
+            `;
+
+            document.getElementById('loopOutput').innerHTML = output;
+            document.getElementById('loopResult').classList.add('show');
+        }
+
+        function clearLoops() {
+            document.getElementById('loopNumber').value = '';
+            document.getElementById('loopResult').classList.remove('show');
+        }
+
+        // Assignment #4: Simple Payroll
+        function calculatePayroll() {
+            const name = document.getElementById('empName').value;
+            const days = parseFloat(document.getElementById('daysWorked').value);
+            const rate = parseFloat(document.getElementById('dailyRate').value);
+            const deduction = parseFloat(document.getElementById('deduction').value) || 0;
+
+            if (!name) {
+                alert('Please enter employee name');
+                return;
+            }
+
+            if (isNaN(days) || isNaN(rate) || days < 0 || rate < 0) {
+                alert('Please enter valid numbers for days and rate');
+                return;
+            }
+
+            const grossPay = days * rate;
+            const netPay = grossPay - deduction;
+
+            const output = `
+                <div class="result-item"><strong>Employee Name:</strong> ${name}</div>
+                <div class="result-item"><strong>Days Worked:</strong> ${days}</div>
+                <div class="result-item"><strong>Daily Rate:</strong> ₱${rate.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                <div class="result-item"><strong>Gross Pay:</strong> ₱${grossPay.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                <div class="result-item"><strong>Deductions:</strong> ₱${deduction.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</div>
+                <div class="result-item" style="background: #d4edda; border-color: #c3e6cb;">
+                    <strong>Net Pay:</strong> ₱${netPay.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                </div>
+            `;
+
+            document.getElementById('payrollOutput').innerHTML = output;
+            document.getElementById('payrollResult').classList.add('show');
+        }
+
+        function clearPayroll() {
+            document.getElementById('empName').value = '';
+            document.getElementById('daysWorked').value = '';
+            document.getElementById('dailyRate').value = '';
+            document.getElementById('deduction').value = '0';
+            document.getElementById('payrollResult').classList.remove('show');
+        }
+    </script>
+</body>
+</html>
